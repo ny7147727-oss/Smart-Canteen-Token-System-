@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartServe — Live Web Demo</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="brand-title" onclick="state.currentUser ? (state.currentUser.role === 'ADMIN' ? showView('admin-dashboard') : showView('menu')) : showView('login')">
+      <span class="brand-icon">🍽</span>
+      <span>SmartServe</span>
+      <span class="brand-badge">Token System</span>
+    </div>
+    <div class="header-user-info" id="header-right">
+      <!-- Injected via JavaScript -->
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-container">
+
+    <!-- VIEW 1: Login -->
+    <section id="view-login" class="view-section active">
+      <div class="auth-box card-elevated">
+        <div class="card-header" style="text-align: center;">
+          <h2 class="card-title">Welcome to SmartServe 🍽</h2>
+          <p class="card-subtitle">Sign in to browse food items and track live tokens</p>
+          
+          <div class="demo-pills">
+            <button type="button" class="demo-pill-btn active" id="pill-student" onclick="setDemoLogin('student')">Student (rahul)</button>
+            <button type="button" class="demo-pill-btn" id="pill-admin" onclick="setDemoLogin('admin')">Admin (admin)</button>
+          </div>
+        </div>
+
+        <form onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label class="form-label" for="login-username">Username</label>
+            <input type="text" id="login-username" class="form-control" value="rahul" placeholder="Enter username" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="login-password">Password</label>
+            <input type="password" id="login-password" class="form-control" value="rahul123" placeholder="Enter password" required>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" style="margin-top: 10px;">Sign In →</button>
+        </form>
+
+        <div style="text-align: center; margin-top: 20px; font-size: 0.88rem; color: var(--text-muted);">
+          Don't have an account? <a href="#" style="color: var(--primary); font-weight: 600; text-decoration: none;" onclick="showView('register')">Register here</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: Register -->
+    <section id="view-register" class="view-section">
+      <div class="auth-box card-elevated">
+        <div class="card-header" style="text-align: center;">
+          <h2 class="card-title">Student Registration 🎓</h2>
+          <p class="card-subtitle">Create an account to place campus canteen orders</p>
+        </div>
+
+        <form onsubmit="handleRegister(event)">
+          <div class="form-group">
+            <label class="form-label">Full Name *</label>
+            <input type="text" id="reg-fullname" class="form-control" placeholder="e.g. Priya Sharma" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Roll Number *</label>
+              <input type="text" id="reg-rollno" class="form-control" placeholder="e.g. CS2023002" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Username *</label>
+              <input type="text" id="reg-username" class="form-control" placeholder="Choose username" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Password *</label>
+              <input type="password" id="reg-password" class="form-control" placeholder="Min 6 characters" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Confirm Password *</label>
+              <input type="password" id="reg-confirmpassword" class="form-control" placeholder="Re-enter password" required>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" style="margin-top: 10px;">Register Account →</button>
+          <button type="button" class="btn btn-secondary btn-block" style="margin-top: 8px;" onclick="showView('login')">← Back to Sign In</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- VIEW 3: Menu (Modern Student Food Ordering Interface) -->
+    <section id="view-menu" class="view-section">
+      <!-- Hero Welcome Banner -->
+      <div class="menu-hero-banner">
+        <div class="hero-left">
+          <h1 class="hero-greeting" id="hero-greeting">Good Afternoon, Rahul! 👋</h1>
+          <p class="hero-subtitle">What would you like to have today?</p>
+          <p class="hero-tagline">🍽 Freshly prepared campus meals, ready when you are.</p>
+        </div>
+        <div class="hero-right">
+          <div class="live-kitchen-pill">
+            <span class="pulse-indicator"></span>
+            <span>Live Kitchen Active</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search & Cart Action Toolbar -->
+      <div class="menu-toolbar">
+        <div class="search-box-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="menu-search-input" class="form-control menu-search-control" placeholder="Search your favourite food (e.g. Chole, Paneer, Tea)..." oninput="handleSearchInput(event)">
+          <button id="search-clear-btn" class="search-clear-btn" onclick="clearSearch()" title="Clear search">✕</button>
+        </div>
+        <button class="cart-summary-badge-btn" id="cart-header-btn" onclick="showView('cart')">
+          🛒 View Cart (0) — ₹0.00
+        </button>
+      </div>
+
+      <!-- Category Filter Chips -->
+      <div class="category-filter-bar">
+        <button class="category-chip active" data-category="All" onclick="setCategoryFilter('All', this)">All Items</button>
+        <button class="category-chip" data-category="North Indian" onclick="setCategoryFilter('North Indian', this)">🍛 North Indian</button>
+        <button class="category-chip" data-category="South Indian" onclick="setCategoryFilter('South Indian', this)">🥞 South Indian</button>
+        <button class="category-chip" data-category="Healthy" onclick="setCategoryFilter('Healthy', this)">🥑 Healthy</button>
+        <button class="category-chip" data-category="Breakfast" onclick="setCategoryFilter('Breakfast', this)">🍳 Breakfast</button>
+        <button class="category-chip" data-category="Snacks" onclick="setCategoryFilter('Snacks', this)">🥟 Snacks</button>
+        <button class="category-chip" data-category="Beverages" onclick="setCategoryFilter('Beverages', this)">🥤 Beverages</button>
+      </div>
+
+      <!-- Status Bar (Count & Quality Notice) -->
+      <div class="menu-status-bar">
+        <span id="food-count-label" class="food-count-text">Showing all food items</span>
+        <span class="status-fresh-badge">⚡ Instant Token upon Payment</span>
+      </div>
+
+      <!-- Responsive Food Cards Grid -->
+      <div class="food-cards-grid" id="food-cards-grid">
+        <!-- Dynamic Cards populated via JS -->
+      </div>
+    </section>
+
+    <!-- VIEW 4: Cart & Checkout -->
+    <section id="view-cart" class="view-section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <button class="btn btn-secondary btn-sm" onclick="showView('menu')">← Continue Adding Food</button>
+        <button class="btn btn-secondary btn-sm" onclick="clearCart()">Clear Cart</button>
+      </div>
+
+      <div class="card-elevated">
+        <div class="card-header">
+          <h2 class="card-title">Order Cart Summary 🛒</h2>
+          <p class="card-subtitle">Review your selected food items before proceeding to payment</p>
+        </div>
+
+        <div id="cart-items-container">
+          <!-- Cart table rendered here -->
+        </div>
+
+        <div class="cart-total-box">
+          <div>
+            <div class="cart-total-title">Total Payable Amount</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Includes all canteen taxes</div>
+          </div>
+          <div class="cart-total-amount" id="cart-grand-total">₹0.00</div>
+        </div>
+
+        <button id="cart-checkout-btn" class="btn btn-primary btn-block" style="margin-top: 20px; padding: 14px; font-size: 1.05rem;" onclick="showView('payment')">
+          Proceed to Payment →
+        </button>
+      </div>
+    </section>
+
+    <!-- VIEW 5: Payment (Strict Payment-First) -->
+    <section id="view-payment" class="view-section">
+      <div style="margin-bottom: 20px;">
+        <button class="btn btn-secondary btn-sm" onclick="showView('cart')">← Back to Cart</button>
+      </div>
+
+      <div class="card-elevated" id="pay-form-container">
+        <div class="card-header" style="text-align: center;">
+          <h2 class="card-title">Payment & Token Generation 💳</h2>
+          <p class="card-subtitle">Tokens are generated <strong>only after successful payment</strong> to eliminate food wastage.</p>
+        </div>
+
+        <!-- Order Summary Box -->
+        <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; margin: 16px 0;">
+          <h4 style="font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px;">Order Summary</h4>
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.92rem;">
+            <tbody id="payment-summary-tbody">
+              <!-- Dynamically populated -->
+            </tbody>
+            <tfoot>
+              <tr style="border-top: 1.5px solid var(--border);">
+                <td style="padding-top: 10px; font-weight: 700; font-size: 1rem;">TOTAL AMOUNT</td>
+                <td style="padding-top: 10px; text-align: right; font-weight: 800; font-size: 1.2rem; color: var(--primary);" id="payment-total-amount">₹0.00</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <!-- Payment Method Selector -->
+        <label class="form-label" style="font-size: 0.9rem;">Select Payment Method</label>
+        <div class="payment-methods-grid">
+          <div class="payment-method-card active" id="pay-card-upi" onclick="selectPaymentMethod('UPI')">
+            <div class="payment-icon">📱</div>
+            <div class="payment-method-title">UPI / QR</div>
+          </div>
+          <div class="payment-method-card" id="pay-card-card" onclick="selectPaymentMethod('Card')">
+            <div class="payment-icon">💳</div>
+            <div class="payment-method-title">Debit / Credit Card</div>
+          </div>
+          <div class="payment-method-card" id="pay-card-wallet" onclick="selectPaymentMethod('Wallet')">
+            <div class="payment-icon">👛</div>
+            <div class="payment-method-title">Demo Wallet</div>
+          </div>
+        </div>
+
+        <!-- Input Fields -->
+        <div id="pay-fields-upi">
+          <div class="form-group">
+            <label class="form-label">UPI ID *</label>
+            <input type="text" id="pay-upi-id" class="form-control" value="rahul@okaxis" placeholder="username@bank">
+          </div>
+        </div>
+
+        <div id="pay-fields-card" style="display: none;">
+          <div class="form-group">
+            <label class="form-label">Card Number *</label>
+            <input type="text" id="pay-card-number" class="form-control" value="4532 8901 2345 6789" placeholder="16 digit card number">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Expiry (MM/YY)</label>
+              <input type="text" class="form-control" value="12/28">
+            </div>
+            <div class="form-group">
+              <label class="form-label">CVV</label>
+              <input type="password" class="form-control" value="123" maxlength="3">
+            </div>
+          </div>
+        </div>
+
+        <div id="pay-fields-wallet" style="display: none;">
+          <div style="background: var(--success-light); border: 1px solid #bbf7d0; border-radius: var(--radius-md); padding: 12px; margin-bottom: 14px;">
+            <strong style="color: var(--success);">Demo Wallet Active:</strong> Available Balance: <strong>₹500.00</strong>
+          </div>
+        </div>
+
+        <!-- Simulation Toggle -->
+        <div class="sim-switch-box">
+          <div>
+            <div style="font-weight: 700; font-size: 0.88rem;">Simulation Mode:</div>
+            <div id="sim-status-note" style="font-size: 0.8rem;">
+              <span style="color: var(--success); font-weight: 700;">Simulate: Successful Payment (Generates Token)</span>
+            </div>
+          </div>
+          <div>
+            <label style="font-size: 0.82rem; font-weight: 600; cursor: pointer;">
+              <input type="checkbox" id="sim-fail-checkbox" onchange="togglePaymentSim(!this.checked)"> Fail Payment
+            </label>
+          </div>
+        </div>
+
+        <button id="pay-submit-btn" class="btn btn-primary btn-block" style="padding: 14px; font-size: 1.05rem;" onclick="processPayment()">
+          PAY & GENERATE TOKEN →
+        </button>
+      </div>
+
+      <!-- Payment Failure Display -->
+      <div class="card-elevated" id="pay-failure-container" style="display: none; text-align: center; padding: 40px 20px;">
+        <div style="font-size: 3rem; color: var(--danger); margin-bottom: 12px;">✖</div>
+        <h2 style="color: var(--danger);">PAYMENT FAILED</h2>
+        <p style="color: var(--text-muted); margin: 10px 0 24px 0;">
+          Transaction could not be completed by bank.<br>
+          <strong>No token generated.</strong> Your food cart items are preserved.
+        </p>
+        <button class="btn btn-primary" onclick="resetPaymentForm()">🔄 Retry Payment</button>
+        <button class="btn btn-secondary" style="margin-left: 8px;" onclick="showView('cart')">Return to Cart</button>
+      </div>
+    </section>
+
+    <!-- VIEW 6: Order Confirmation & Token Spotlight -->
+    <section id="view-order-confirmation" class="view-section">
+      <div class="card-elevated">
+        <div class="card-header" style="text-align: center;">
+          <div style="display: inline-block; background: var(--success-light); color: var(--success); border-radius: 50%; width: 50px; height: 50px; line-height: 50px; font-size: 1.6rem; font-weight: 800; margin-bottom: 8px;">✓</div>
+          <h2 class="card-title">Payment Successful! Order Confirmed</h2>
+          <p class="card-subtitle">Your food order has been sent to the canteen preparation queue</p>
+        </div>
+
+        <div class="token-spotlight-card">
+          <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">YOUR ASSIGNED TOKEN NUMBER</div>
+          <div class="token-badge-large" id="conf-token-num">#105</div>
+          <div style="font-size: 0.88rem; color: var(--text-muted);">Please present this token at the collection counter when ready.</div>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px; margin: 20px 0;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.9rem; margin-bottom: 14px;">
+            <div><span style="color: var(--text-muted);">Order ID:</span> <strong id="conf-order-id">ORD-1001</strong></div>
+            <div><span style="color: var(--text-muted);">Transaction Ref:</span> <strong id="conf-txn-ref">TXN-892341</strong></div>
+            <div><span style="color: var(--text-muted);">Student:</span> <strong id="conf-student">Rahul Kumar</strong></div>
+            <div><span style="color: var(--text-muted);">Amount Paid:</span> <strong id="conf-amount">₹110.00</strong></div>
+            <div><span style="color: var(--text-muted);">Payment Method:</span> <strong id="conf-pay-method">UPI</strong></div>
+            <div><span style="color: var(--text-muted);">Order Time:</span> <strong id="conf-time">12:45 PM</strong></div>
+          </div>
+
+          <hr style="border: 0; border-top: 1px solid var(--border); margin: 12px 0;">
+
+          <h5 style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Ordered Items</h5>
+          <div id="conf-items-list">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 12px; justify-content: center;">
+          <button class="btn btn-primary" onclick="showView('token-status')">📍 Track Token Live</button>
+          <button class="btn btn-secondary" onclick="showView('menu')">🍽 Back to Menu</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 7: Live Token Status Tracker -->
+    <section id="view-token-status" class="view-section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <button class="btn btn-secondary btn-sm" onclick="showView('menu')">← Back to Menu</button>
+        <button class="btn btn-secondary btn-sm" onclick="renderTokenStatus()">🔄 Refresh Status</button>
+      </div>
+
+      <div class="card-elevated">
+        <div class="card-header" style="text-align: center;">
+          <h2 class="card-title">Live Token Progress Tracker 📍</h2>
+          <p class="card-subtitle">Real-time canteen order status</p>
+        </div>
+
+        <div style="text-align: center; margin: 16px 0;">
+          <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 700;">ACTIVE TOKEN</div>
+          <div style="font-size: 2.2rem; font-weight: 900; color: var(--primary);" id="track-token-num">#105</div>
+          <div><span class="badge badge-primary" id="track-status-badge">PREPARING</span></div>
+        </div>
+
+        <!-- 5-Step Visual Stepper -->
+        <div class="stepper-container">
+          <div class="stepper-step completed" id="step-confirmed">
+            <div class="step-circle">✓</div>
+            <div class="step-label">Confirmed</div>
+          </div>
+          <div class="stepper-step completed" id="step-queued">
+            <div class="step-circle">✓</div>
+            <div class="step-label">Queued</div>
+          </div>
+          <div class="stepper-step active" id="step-preparing">
+            <div class="step-circle">●</div>
+            <div class="step-label">Preparing</div>
+          </div>
+          <div class="stepper-step" id="step-ready">
+            <div class="step-circle">○</div>
+            <div class="step-label">Ready</div>
+          </div>
+          <div class="stepper-step" id="step-completed">
+            <div class="step-circle">○</div>
+            <div class="step-label">Completed</div>
+          </div>
+        </div>
+
+        <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; margin-top: 24px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.88rem;">
+            <div><span style="color: var(--text-muted);">Order ID:</span> <strong id="track-order-id">ORD-1001</strong></div>
+            <div><span style="color: var(--text-muted);">Student:</span> <strong id="track-student">Rahul Kumar</strong></div>
+            <div><span style="color: var(--text-muted);">Total Paid:</span> <strong id="track-amount">₹110.00</strong></div>
+            <div><span style="color: var(--text-muted);">Estimated Prep:</span> <strong>8 - 12 mins</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 8: Admin Dashboard -->
+    <section id="view-admin-dashboard" class="view-section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div>
+          <h2 class="card-title">Admin Operations Dashboard 📊</h2>
+          <p class="card-subtitle">Real-time canteen metrics and live order stream</p>
+        </div>
+        <div>
+          <button class="btn btn-primary btn-sm" onclick="showView('live-orders')">🍳 Live Kitchen Queue</button>
+        </div>
+      </div>
+
+      <!-- 6 KPI Cards -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-title">Total Orders</div>
+          <div class="kpi-num" id="kpi-total-orders">0</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Active Orders</div>
+          <div class="kpi-num" style="color: var(--primary);" id="kpi-active-orders">0</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Preparing</div>
+          <div class="kpi-num" style="color: var(--warning);" id="kpi-preparing">0</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Ready for Pickup</div>
+          <div class="kpi-num" style="color: var(--success);" id="kpi-ready">0</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Completed</div>
+          <div class="kpi-num" id="kpi-completed">0</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-title">Total Sales</div>
+          <div class="kpi-num" style="color: var(--success); font-size: 1.3rem;" id="kpi-total-sales">₹0.00</div>
+        </div>
+      </div>
+
+      <!-- Recent Orders Table -->
+      <div class="card-elevated">
+        <div class="card-header">
+          <h3 class="card-title" style="font-size: 1.1rem;">Recent Canteen Orders</h3>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="food-list-table">
+            <thead>
+              <tr>
+                <th>Token #</th>
+                <th>Student</th>
+                <th>Total</th>
+                <th>Payment</th>
+                <th>Status</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody id="admin-recent-orders-tbody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 9: Live Kitchen Orders Board -->
+    <section id="view-live-orders" class="view-section">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <button class="btn btn-secondary btn-sm" onclick="showView('admin-dashboard')">← Back to Dashboard</button>
+        <button class="btn btn-secondary btn-sm" onclick="renderLiveOrders()">🔄 Refresh Queue</button>
+      </div>
+
+      <div class="card-elevated">
+        <div class="card-header">
+          <h2 class="card-title">Live Kitchen Queue (Food Tokens)</h2>
+          <p class="card-subtitle">Showing only authorized/paid student tokens</p>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table class="food-list-table">
+            <thead>
+              <tr>
+                <th>Token #</th>
+                <th>Student</th>
+                <th>Total</th>
+                <th>Payment</th>
+                <th>Status</th>
+                <th>Time</th>
+                <th>Quick Actions</th>
+              </tr>
+            </thead>
+            <tbody id="live-orders-tbody">
+              <!-- Populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

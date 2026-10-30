@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<ScrollPane fitToWidth="true" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.smartcanteen.frontend.RegisterController">
+    <content>
+        <StackPane alignment="CENTER" prefHeight="700.0" prefWidth="560.0" style="-fx-background-color: #f8fafc;">
+            <padding>
+                <Insets bottom="28.0" top="28.0" />
+            </padding>
+            <children>
+                <VBox alignment="CENTER" maxWidth="460.0" spacing="12.0" styleClass="card-elevated">
+                    <children>
+                        <VBox alignment="CENTER" spacing="4.0">
+                            <children>
+                                <Label styleClass="title-label" text="Student Registration 🎓" />
+                                <Label styleClass="subtitle-label" text="Create your account to order from the campus canteen" />
+                            </children>
+                        </VBox>
+
+                        <VBox alignment="CENTER_LEFT" spacing="4.0">
+                            <children>
+                                <Label styleClass="field-label" text="Full Name *" />
+                                <TextField fx:id="fullNameField" promptText="e.g. Rahul Sharma" />
+                            </children>
+                        </VBox>
+
+                        <VBox alignment="CENTER_LEFT" spacing="4.0">
+                            <children>
+                                <Label styleClass="field-label" text="Roll Number *" />
+                                <TextField fx:id="rollNumberField" promptText="e.g. CS2023001" />
+                            </children>
+                        </VBox>
+
+                        <VBox alignment="CENTER_LEFT" spacing="4.0">
+                            <children>
+                                <Label styleClass="field-label" text="Username *" />
+                                <TextField fx:id="usernameField" promptText="Choose a username" />
+                            </children>
+                        </VBox>
+
+                        <VBox alignment="CENTER_LEFT" spacing="4.0">
+                            <children>
+                                <Label styleClass="field-label" text="Password *" />
+                                <PasswordField fx:id="passwordField" promptText="At least 6 characters" />
+                            </children>
+                        </VBox>
+
+                        <VBox alignment="CENTER_LEFT" spacing="4.0">
+                            <children>
+                                <Label styleClass="field-label" text="Confirm Password *" />
+                                <PasswordField fx:id="confirmPasswordField" promptText="Re-enter password" />
+                            </children>
+                        </VBox>
+
+                        <VBox alignment="CENTER_LEFT" spacing="4.0">
+                            <children>
+                                <Label styleClass="field-label" text="Email (Optional)" />
+                                <TextField fx:id="emailField" promptText="e.g. student@college.edu" />
+                            </children>
+                        </VBox>
+
+                        <VBox alignment="CENTER_LEFT" spacing="4.0">
+                            <children>
+                                <Label styleClass="field-label" text="Phone (Optional)" />
+                                <TextField fx:id="phoneField" promptText="e.g. 9876543210" />
+                            </children>
+                        </VBox>
+
+                        <Label fx:id="errorLabel" styleClass="error-label" text="" wrapText="true" />
+
+                        <Button maxWidth="1.7976931348623157E308" onAction="#handleRegister" styleClass="button-primary" text="Create Account →">
+                            <VBox.margin>
+                                <Insets top="6.0" />
+                            </VBox.margin>
+                        </Button>
+
+                        <HBox alignment="CENTER" spacing="8.0">
+                            <children>
+                                <Label styleClass="subtitle-label" text="Already have an account?" />
+                                <Button onAction="#handleBackToLogin" styleClass="button-secondary" text="Back to Login" />
+                            </children>
+                            <VBox.margin>
+                                <Insets top="4.0" />
+                            </VBox.margin>
+                        </HBox>
+                    </children>
+                    <padding>
+                        <Insets bottom="32.0" left="32.0" right="32.0" top="32.0" />
+                    </padding>
+                </VBox>
+            </children>
+        </StackPane>
+    </content>
+</ScrollPane>

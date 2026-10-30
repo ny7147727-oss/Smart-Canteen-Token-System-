@@ -1,0 +1,25 @@
+# Target build directory (Maven output)
+target/
+
+# IDE configurations
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# Compiled class files & logs
+*.class
+*.log
+
+# Operating system metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Database secrets & local environment overrides (use db.properties.example as template)
+# Uncomment the line below to prevent pushing personal database credentials:
+# src/main/resources/db.properties
+
+

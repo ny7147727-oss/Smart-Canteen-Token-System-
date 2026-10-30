@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="760.0" prefWidth="1000.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.smartcanteen.frontend.OrderConfirmationController">
+    <!-- Top Header Bar -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="16.0" style="-fx-background-color: #0f172a; -fx-padding: 14px 24px;">
+            <children>
+                <Button onAction="#handleBackToMenu" style="-fx-text-fill: #e2e8f0; -fx-border-color: #475569;" styleClass="button-secondary" text="← Back to Menu" />
+                
+                <VBox spacing="2.0">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="8.0">
+                            <children>
+                                <Label style="-fx-text-fill: #ffffff; -fx-font-size: 19px; -fx-font-weight: bold;" text="Order Confirmed &amp; Token Issued 🎉" />
+                                <Label style="-fx-background-color: #10b981; -fx-text-fill: #ffffff; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 2px 8px; -fx-background-radius: 4px;" text="PAID" />
+                            </children>
+                        </HBox>
+                        <Label style="-fx-text-fill: #94a3b8; -fx-font-size: 12px;" text="SmartServe Token Authorization &amp; Live Kitchen Tracker" />
+                    </children>
+                </VBox>
+
+                <HBox alignment="CENTER_RIGHT" spacing="12.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label fx:id="studentNameLabel" styleClass="profile-pill" text="👤 Student" />
+                    </children>
+                </HBox>
+            </children>
+        </HBox>
+    </top>
+
+    <!-- Center Scrollable Content -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: #f8fafc; -fx-background: #f8fafc; -fx-padding: 20px;">
+            <content>
+                <VBox alignment="TOP_CENTER" spacing="20.0">
+                    <children>
+                        <!-- Top Success Confirmation Badges -->
+                        <HBox alignment="CENTER" spacing="16.0">
+                            <children>
+                                <HBox alignment="CENTER" spacing="8.0" style="-fx-background-color: #dcfce7; -fx-border-color: #86efac; -fx-border-radius: 20px; -fx-background-radius: 20px; -fx-padding: 6px 18px;">
+                                    <children>
+                                        <Label style="-fx-font-size: 14px; -fx-text-fill: #15803d;" text="✓" />
+                                        <Label style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #15803d;" text="Payment Successful" />
+                                    </children>
+                                </HBox>
+
+                                <HBox alignment="CENTER" spacing="8.0" style="-fx-background-color: #e0f2fe; -fx-border-color: #7dd3fc; -fx-border-radius: 20px; -fx-background-radius: 20px; -fx-padding: 6px 18px;">
+                                    <children>
+                                        <Label style="-fx-font-size: 14px; -fx-text-fill: #0369a1;" text="✓" />
+                                        <Label style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #0369a1;" text="Order Confirmed" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </HBox>
+
+                        <!-- Main Visual Focus: Huge Prominent Token Spotlight Card -->
+                        <VBox alignment="CENTER" maxWidth="840.0" spacing="10.0" style="-fx-background-color: #1e293b; -fx-background-radius: 14px; -fx-border-color: #334155; -fx-border-radius: 14px; -fx-padding: 24px 32px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.18), 16, 0, 0, 6);">
+                            <children>
+                                <Label style="-fx-text-fill: #94a3b8; -fx-font-size: 13px; -fx-font-weight: bold; -fx-letter-spacing: 2px;" text="YOUR CANTEEN TOKEN NUMBER" />
+                                <Label fx:id="tokenNumberLabel" style="-fx-text-fill: #38bdf8; -fx-font-size: 54px; -fx-font-weight: bold;" text="TOKEN #105" />
+                                
+                                <HBox alignment="CENTER" spacing="12.0">
+                                    <children>
+                                        <Label fx:id="tokenStatusBadgeLabel" style="-fx-background-color: #0284c7; -fx-text-fill: #ffffff; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 5px 14px; -fx-background-radius: 14px;" text="● IN PREPARATION QUEUE" />
+                                        <Label fx:id="estimatedTimeLabel" style="-fx-background-color: #0f766e; -fx-text-fill: #ccfbf1; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 5px 14px; -fx-background-radius: 14px;" text="⏱ Est. Preparation: ~10-15 mins" />
+                                    </children>
+                                </HBox>
+
+                                <Label style="-fx-text-fill: #94a3b8; -fx-font-size: 12px;" text="Please display this token number at the canteen pickup counter when called." />
+                            </children>
+                        </VBox>
+
+                        <!-- Main 2-Column Grid: Visual Progress Stepper & Order Details -->
+                        <HBox alignment="TOP_CENTER" maxWidth="840.0" spacing="20.0">
+                            <children>
+                                <!-- Left: Visual Order Progress / Status Stepper -->
+                                <VBox maxWidth="410.0" minWidth="380.0" spacing="14.0" styleClass="card" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT">
+                                            <children>
+                                                <Label style="-fx-font-size: 16px;" styleClass="title-label" text="LIVE ORDER LIFECYCLE" />
+                                                <Region HBox.hgrow="ALWAYS" />
+                                                <Button onAction="#handleRefreshStatus" style="-fx-font-size: 11px; -fx-padding: 4px 10px;" styleClass="button-secondary" text="🔄 Refresh" />
+                                            </children>
+                                        </HBox>
+                                        
+                                        <Label styleClass="subtitle-label" text="Visual status progression of your food order" />
+                                        <Separator />
+
+                                        <ProgressBar fx:id="statusProgressBar" maxWidth="1.7976931348623157E308" prefHeight="10.0" progress="0.4" style="-fx-accent: #2563eb;" />
+
+                                        <!-- Vertical Stepper Steps -->
+                                        <VBox spacing="10.0">
+                                            <children>
+                                                <!-- Step 1: Confirmed -->
+                                                <HBox fx:id="stepConfirmedBox" alignment="CENTER_LEFT" spacing="12.0" style="-fx-background-color: #f0fdf4; -fx-border-color: #bbf7d0; -fx-padding: 10px; -fx-background-radius: 6px; -fx-border-radius: 6px;">
+                                                    <children>
+                                                        <Label fx:id="step1Icon" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #15803d;" text="✓" />
+                                                        <VBox spacing="1.0">
+                                                            <children>
+                                                                <Label style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #15803d;" text="Confirmed" />
+                                                                <Label style="-fx-font-size: 11px; -fx-text-fill: #64748b;" text="Payment authorized &amp; verified" />
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </HBox>
+
+                                                <!-- Step 2: Queued -->
+                                                <HBox fx:id="stepQueuedBox" alignment="CENTER_LEFT" spacing="12.0" style="-fx-background-color: #f0fdf4; -fx-border-color: #bbf7d0; -fx-padding: 10px; -fx-background-radius: 6px; -fx-border-radius: 6px;">
+                                                    <children>
+                                                        <Label fx:id="step2Icon" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #15803d;" text="✓" />
+                                                        <VBox spacing="1.0">
+                                                            <children>
+                                                                <Label style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #15803d;" text="Queued" />
+                                                                <Label style="-fx-font-size: 11px; -fx-text-fill: #64748b;" text="Order received in kitchen queue" />
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </HBox>
+
+                                                <!-- Step 3: Preparing -->
+                                                <HBox fx:id="stepPreparingBox" alignment="CENTER_LEFT" spacing="12.0" style="-fx-background-color: #eff6ff; -fx-border-color: #bfdbfe; -fx-padding: 10px; -fx-background-radius: 6px; -fx-border-radius: 6px;">
+                                                    <children>
+                                                        <Label fx:id="step3Icon" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1d4ed8;" text="●" />
+                                                        <VBox spacing="1.0">
+                                                            <children>
+                                                                <Label style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1d4ed8;" text="Preparing" />
+                                                                <Label style="-fx-font-size: 11px; -fx-text-fill: #64748b;" text="Chefs preparing your food" />
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </HBox>
+
+                                                <!-- Step 4: Ready -->
+                                                <HBox fx:id="stepReadyBox" alignment="CENTER_LEFT" spacing="12.0" style="-fx-background-color: #f8fafc; -fx-border-color: #e2e8f0; -fx-padding: 10px; -fx-background-radius: 6px; -fx-border-radius: 6px;">
+                                                    <children>
+                                                        <Label fx:id="step4Icon" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #94a3b8;" text="○" />
+                                                        <VBox spacing="1.0">
+                                                            <children>
+                                                                <Label style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #64748b;" text="Ready for Pickup" />
+                                                                <Label style="-fx-font-size: 11px; -fx-text-fill: #94a3b8;" text="Token will be called at counter" />
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </HBox>
+
+                                                <!-- Step 5: Completed -->
+                                                <HBox fx:id="stepCompletedBox" alignment="CENTER_LEFT" spacing="12.0" style="-fx-background-color: #f8fafc; -fx-border-color: #e2e8f0; -fx-padding: 10px; -fx-background-radius: 6px; -fx-border-radius: 6px;">
+                                                    <children>
+                                                        <Label fx:id="step5Icon" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #94a3b8;" text="○" />
+                                                        <VBox spacing="1.0">
+                                                            <children>
+                                                                <Label style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #64748b;" text="Completed" />
+                                                                <Label style="-fx-font-size: 11px; -fx-text-fill: #94a3b8;" text="Food served and token closed" />
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </VBox>
+
+                                <!-- Right: Receipt Breakdown & Payment Audit -->
+                                <VBox maxWidth="410.0" minWidth="380.0" spacing="14.0" styleClass="card" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <Label style="-fx-font-size: 16px;" styleClass="title-label" text="PAYMENT &amp; ORDER AUDIT" />
+                                        <Label styleClass="subtitle-label" text="Official demo receipt breakdown" />
+                                        <Separator />
+
+                                        <!-- Details Key-Value Rows -->
+                                        <VBox spacing="8.0">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT">
+                                                    <children>
+                                                        <Label style="-fx-font-size: 13px; -fx-text-fill: #64748b;" text="Transaction Ref:" />
+                                                        <Region HBox.hgrow="ALWAYS" />
+                                                        <Label fx:id="txnRefLabel" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #0f172a;" text="TXN-20260924-XXXX" />
+                                                    </children>
+                                                </HBox>
+
+                                                <HBox alignment="CENTER_LEFT">
+                                                    <children>
+                                                        <Label style="-fx-font-size: 13px; -fx-text-fill: #64748b;" text="Order ID:" />
+                                                        <Region HBox.hgrow="ALWAYS" />
+                                                        <Label fx:id="orderIdLabel" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #0f172a;" text="#104" />
+                                                    </children>
+                                                </HBox>
+
+                                                <HBox alignment="CENTER_LEFT">
+                                                    <children>
+                                                        <Label style="-fx-font-size: 13px; -fx-text-fill: #64748b;" text="Payment Method:" />
+                                                        <Region HBox.hgrow="ALWAYS" />
+                                                        <Label fx:id="paymentMethodLabel" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #166534;" text="📱 UPI / Online" />
+                                                    </children>
+                                                </HBox>
+
+                                                <HBox alignment="CENTER_LEFT">
+                                                    <children>
+                                                        <Label style="-fx-font-size: 13px; -fx-text-fill: #64748b;" text="Amount Paid:" />
+                                                        <Region HBox.hgrow="ALWAYS" />
+                                                        <Label fx:id="amountPaidLabel" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #16a34a;" text="₹0.00" />
+                                                    </children>
+                                                </HBox>
+
+                                                <HBox alignment="CENTER_LEFT">
+                                                    <children>
+                                                        <Label style="-fx-font-size: 13px; -fx-text-fill: #64748b;" text="Current Status:" />
+                                                        <Region HBox.hgrow="ALWAYS" />
+                                                        <Label fx:id="currentStatusLabel" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #2563eb;" text="CONFIRMED" />
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+
+                                        <Separator />
+
+                                        <Label styleClass="field-label" text="Ordered Items:" />
+                                        <ListView fx:id="orderSummaryListView" prefHeight="130.0" style="-fx-background-radius: 6px; -fx-border-color: #cbd5e1; -fx-border-radius: 6px;" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+
+                        <!-- Bottom Action Navigation Buttons -->
+                        <HBox alignment="CENTER" maxWidth="840.0" spacing="16.0">
+                            <children>
+                                <Button onAction="#handleTrackToken" styleClass="button-primary" style="-fx-font-size: 14px; -fx-padding: 12px 26px;" text="🎫 Track Token" />
+                                <Button onAction="#handleBackToMenu" styleClass="button-secondary" style="-fx-font-size: 14px; -fx-padding: 12px 24px;" text="🍽 Back to Menu" />
+                                <Button onAction="#handleGoToDashboard" styleClass="button-secondary" style="-fx-font-size: 14px; -fx-padding: 12px 24px;" text="👤 Student Dashboard" />
+                            </children>
+                            <VBox.margin>
+                                <Insets bottom="20.0" top="10.0" />
+                            </VBox.margin>
+                        </HBox>
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>

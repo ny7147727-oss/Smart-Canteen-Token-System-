@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="740.0" prefWidth="980.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.smartcanteen.frontend.PaymentController">
+    <!-- Top Header -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="16.0" style="-fx-background-color: #0f172a; -fx-padding: 14px 24px;">
+            <children>
+                <Button onAction="#handleCancelPayment" style="-fx-text-fill: #e2e8f0; -fx-border-color: #475569;" styleClass="button-secondary" text="← Return to Cart" />
+                
+                <VBox spacing="2.0">
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="8.0">
+                            <children>
+                                <Label style="-fx-text-fill: #ffffff; -fx-font-size: 19px; -fx-font-weight: bold;" text="DEMO PAYMENT 💳" />
+                                <Label style="-fx-background-color: #3b82f6; -fx-text-fill: #ffffff; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 2px 8px; -fx-background-radius: 4px;" text="ACADEMIC PROJECT" />
+                            </children>
+                        </HBox>
+                        <Label style="-fx-text-fill: #94a3b8; -fx-font-size: 12px;" text="SmartServe Token Authorization • Simulated Gateway" />
+                    </children>
+                </VBox>
+
+                <HBox alignment="CENTER_RIGHT" spacing="12.0" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label fx:id="paymentStudentLabel" styleClass="profile-pill" text="👤 Student" />
+                    </children>
+                </HBox>
+            </children>
+        </HBox>
+    </top>
+
+    <!-- Center StackPane containing Form View, Success View, and Failure View -->
+    <center>
+        <StackPane style="-fx-background-color: #f8fafc;">
+            <children>
+                <!-- 1. MAIN PAYMENT FORM VIEW -->
+                <ScrollPane fx:id="paymentFormView" fitToWidth="true" style="-fx-background-color: #f8fafc; -fx-background: #f8fafc; -fx-padding: 20px;">
+                    <content>
+                        <HBox spacing="24.0">
+                            <children>
+                                <!-- Left Column: Methods & Details -->
+                                <VBox spacing="16.0" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <!-- Method Selection Card -->
+                                        <VBox spacing="12.0" styleClass="card">
+                                            <children>
+                                                <Label style="-fx-font-size: 17px;" styleClass="title-label" text="PAYMENT METHOD" />
+                                                <Label styleClass="subtitle-label" text="Select your demo payment channel to authorize your token" />
+                                                <Separator />
+
+                                                <HBox spacing="24.0">
+                                                    <children>
+                                                        <!-- UPI -->
+                                                        <RadioButton fx:id="upiRadioBtn" selected="true" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="○ UPI">
+                                                            <toggleGroup>
+                                                                <ToggleGroup fx:id="paymentMethodGroup" />
+                                                            </toggleGroup>
+                                                        </RadioButton>
+
+                                                        <!-- Card -->
+                                                        <RadioButton fx:id="cardRadioBtn" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="○ Card" toggleGroup="$paymentMethodGroup" />
+
+                                                        <!-- Wallet -->
+                                                        <RadioButton fx:id="walletRadioBtn" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="○ Demo Wallet" toggleGroup="$paymentMethodGroup" />
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+
+                                        <!-- Dynamic Input Form Container -->
+                                        <!-- UPI Form -->
+                                        <VBox fx:id="upiFormBox" spacing="12.0" styleClass="card" style="-fx-background-color: #ffffff;">
+                                            <children>
+                                                <Label style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1e293b;" text="📱 UPI Details" />
+                                                <Label style="-fx-font-size: 12px; -fx-text-fill: #64748b;" text="Enter a simulated Virtual Payment Address (VPA) / UPI ID" />
+                                                
+                                                <VBox spacing="6.0">
+                                                    <children>
+                                                        <Label styleClass="field-label" text="UPI ID:" />
+                                                        <TextField fx:id="upiIdField" promptText="e.g. student@upi or rahul@oksbi" styleClass="text-field" text="student@upi" />
+                                                    </children>
+                                                </VBox>
+
+                                                <HBox alignment="CENTER_LEFT" spacing="8.0">
+                                                    <children>
+                                                        <Label style="-fx-font-size: 11px; -fx-text-fill: #64748b;" text="Quick demo presets:" />
+                                                        <Button onAction="#handlePresetUpi1" style="-fx-font-size: 11px; -fx-padding: 3px 8px;" styleClass="button-secondary" text="rahul@oksbi" />
+                                                        <Button onAction="#handlePresetUpi2" style="-fx-font-size: 11px; -fx-padding: 3px 8px;" styleClass="button-secondary" text="student@upi" />
+                                                        <Button onAction="#handlePresetUpi3" style="-fx-font-size: 11px; -fx-padding: 3px 8px;" styleClass="button-secondary" text="canteen@paytm" />
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+
+                                        <!-- Card Form -->
+                                        <VBox fx:id="cardFormBox" managed="false" spacing="12.0" styleClass="card" style="-fx-background-color: #ffffff;" visible="false">
+                                            <children>
+                                                <Label style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1e293b;" text="💳 Card Details" />
+                                                <Label style="-fx-font-size: 12px; -fx-text-fill: #059669;" text="🔒 Security Rule: Sensitive details (CVV, full number) are NEVER stored. Only masked references are kept." wrapText="true" />
+                                                
+                                                <VBox spacing="6.0">
+                                                    <children>
+                                                        <Label styleClass="field-label" text="Cardholder Name:" />
+                                                        <TextField fx:id="cardHolderNameField" promptText="Name on Card" styleClass="text-field" text="Rahul Kumar" />
+                                                    </children>
+                                                </VBox>
+
+                                                <VBox spacing="6.0">
+                                                    <children>
+                                                        <Label styleClass="field-label" text="Card Number (16 Digits):" />
+                                                        <TextField fx:id="cardNumberField" promptText="4532 8765 1092 3456" styleClass="text-field" text="4532876510923456" />
+                                                    </children>
+                                                </VBox>
+
+                                                <HBox spacing="14.0">
+                                                    <children>
+                                                        <VBox spacing="6.0" HBox.hgrow="ALWAYS">
+                                                            <children>
+                                                                <Label styleClass="field-label" text="Expiry (MM/YY):" />
+                                                                <TextField fx:id="cardExpiryField" promptText="12/28" styleClass="text-field" text="12/28" />
+                                                            </children>
+                                                        </VBox>
+
+                                                        <VBox spacing="6.0" HBox.hgrow="ALWAYS">
+                                                            <children>
+                                                                <Label styleClass="field-label" text="CVV (3 Digits):" />
+                                                                <PasswordField fx:id="cardCvvField" promptText="•••" styleClass="text-field" text="888" />
+                                                            </children>
+                                                        </VBox>
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+
+                                        <!-- Demo Wallet Form -->
+                                        <VBox fx:id="walletFormBox" managed="false" spacing="12.0" styleClass="card" style="-fx-background-color: #ffffff;" visible="false">
+                                            <children>
+                                                <Label style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1e293b;" text="👛 Demo Wallet Confirmation" />
+                                                <Label style="-fx-font-size: 12px; -fx-text-fill: #64748b;" text="Instant debit from your SmartServe campus demo wallet." />
+                                                
+                                                <HBox alignment="CENTER_LEFT" spacing="16.0" style="-fx-background-color: #f0fdf4; -fx-border-color: #bbf7d0; -fx-padding: 12px; -fx-background-radius: 6px; -fx-border-radius: 6px;">
+                                                    <children>
+                                                        <VBox spacing="2.0">
+                                                            <children>
+                                                                <Label style="-fx-font-size: 12px; -fx-text-fill: #15803d;" text="Available Wallet Balance:" />
+                                                                <Label fx:id="walletBalanceLabel" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #166534;" text="₹500.00" />
+                                                            </children>
+                                                        </VBox>
+                                                        <Region HBox.hgrow="ALWAYS" />
+                                                        <Label style="-fx-background-color: #dcfce7; -fx-text-fill: #15803d; -fx-padding: 4px 10px; -fx-background-radius: 12px; -fx-font-weight: bold; -fx-font-size: 11px;" text="READY" />
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+
+                                        <!-- Token Guarantee Notice Banner -->
+                                        <HBox alignment="CENTER_LEFT" spacing="12.0" style="-fx-background-color: #eff6ff; -fx-border-color: #bfdbfe; -fx-border-radius: 6px; -fx-background-radius: 6px; -fx-padding: 12px;">
+                                            <children>
+                                                <Label style="-fx-font-size: 18px;" text="ℹ️" />
+                                                <Label style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1e40af;" text="Your token will be generated only after successful payment." wrapText="true" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+
+                                        <!-- Academic Simulation Tools -->
+                                        <VBox spacing="8.0" style="-fx-background-color: #fffbeb; -fx-border-color: #fde68a; -fx-padding: 10px 14px; -fx-border-radius: 6px; -fx-background-radius: 6px;">
+                                            <children>
+                                                <Label style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #92400e;" text="🧪 Academic Test Control:" />
+                                                <HBox spacing="10.0">
+                                                    <children>
+                                                        <Button fx:id="testFailureBtn" onAction="#handleSimulateFailure" style="-fx-background-color: #fee2e2; -fx-text-fill: #991b1b; -fx-font-size: 12px; -fx-font-weight: bold; -fx-border-color: #fca5a5; -fx-border-radius: 4px; -fx-cursor: hand;" text="✗ Simulate Payment Failure (Verify No Token / Cart Intact)" />
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </VBox>
+
+                                <!-- Right Column: Order Summary & Action Buttons -->
+                                <VBox maxWidth="360.0" minWidth="320.0" spacing="16.0">
+                                    <children>
+                                        <VBox spacing="14.0" styleClass="card">
+                                            <children>
+                                                <Label style="-fx-font-size: 17px;" styleClass="title-label" text="ORDER SUMMARY" />
+                                                <Separator />
+
+                                                <Label styleClass="field-label" text="Items:" />
+                                                <ListView fx:id="orderItemsPreviewList" prefHeight="140.0" style="-fx-background-radius: 6px; -fx-border-color: #cbd5e1; -fx-border-radius: 6px;" />
+
+                                                <HBox alignment="CENTER_LEFT">
+                                                    <children>
+                                                        <Label style="-fx-font-size: 14px; -fx-text-fill: #475569;" text="Items Subtotal" />
+                                                        <Region HBox.hgrow="ALWAYS" />
+                                                        <Label fx:id="paymentSubtotalLabel" style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1e293b;" text="₹0.00" />
+                                                    </children>
+                                                </HBox>
+
+                                                <HBox alignment="CENTER_LEFT">
+                                                    <children>
+                                                        <Label style="-fx-font-size: 14px; -fx-text-fill: #475569;" text="Taxes / Charges" />
+                                                        <Region HBox.hgrow="ALWAYS" />
+                                                        <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #16a34a;" text="₹0.00" />
+                                                    </children>
+                                                </HBox>
+
+                                                <Separator />
+
+                                                <HBox alignment="CENTER_LEFT">
+                                                    <children>
+                                                        <Label style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #0f172a;" text="TOTAL" />
+                                                        <Region HBox.hgrow="ALWAYS" />
+                                                        <Label fx:id="paymentTotalLabel" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #047857;" text="₹0.00" />
+                                                    </children>
+                                                </HBox>
+
+                                                <!-- Primary Button: PAY -->
+                                                <Button fx:id="payAndConfirmBtn" maxWidth="1.7976931348623157E308" onAction="#handlePaySuccess" style="-fx-font-size: 16px; -fx-padding: 14px 20px; -fx-background-color: #10b981; -fx-text-fill: #ffffff; -fx-font-weight: bold; -fx-background-radius: 6px; -fx-cursor: hand;" text="PAY ₹0.00">
+                                                    <VBox.margin>
+                                                        <Insets top="6.0" />
+                                                    </VBox.margin>
+                                                </Button>
+
+                                                <!-- Secondary Button: Cancel -->
+                                                <Button maxWidth="1.7976931348623157E308" onAction="#handleCancelPayment" styleClass="button-secondary" text="Cancel" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                    </content>
+                </ScrollPane>
+
+                <!-- 2. PAYMENT SUCCESSFUL OVERLAY VIEW -->
+                <VBox fx:id="paymentSuccessView" alignment="CENTER" managed="false" spacing="20.0" style="-fx-background-color: #f8fafc; -fx-padding: 30px;" visible="false">
+                    <children>
+                        <VBox alignment="CENTER" maxWidth="520.0" spacing="18.0" styleClass="card" style="-fx-background-color: #ffffff; -fx-padding: 36px;">
+                            <children>
+                                <Label style="-fx-font-size: 48px; -fx-text-fill: #16a34a;" text="✓" />
+                                <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #15803d;" text="PAYMENT SUCCESSFUL" />
+                                
+                                <VBox alignment="CENTER" spacing="4.0" style="-fx-background-color: #f0fdf4; -fx-border-color: #bbf7d0; -fx-border-radius: 8px; -fx-background-radius: 8px; -fx-padding: 12px 20px;">
+                                    <children>
+                                        <Label fx:id="successTxnRefLabel" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #166534;" text="Transaction ID: TXN-20260924-XXXX" />
+                                        <Label style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #059669;" text="Order Confirmed" />
+                                    </children>
+                                </VBox>
+
+                                <!-- Big Prominent Token Box -->
+                                <VBox alignment="CENTER" spacing="8.0" style="-fx-background-color: #1e293b; -fx-border-radius: 12px; -fx-background-radius: 12px; -fx-padding: 24px;">
+                                    <children>
+                                        <Label style="-fx-text-fill: #94a3b8; -fx-font-size: 13px; -fx-font-weight: bold; -fx-letter-spacing: 2px;" text="YOUR FOOD TOKEN" />
+                                        <Label fx:id="successTokenLabel" style="-fx-text-fill: #38bdf8; -fx-font-size: 44px; -fx-font-weight: bold;" text="TOKEN #105" />
+                                        <Label style="-fx-background-color: #0369a1; -fx-text-fill: #ffffff; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 4px 12px; -fx-background-radius: 12px;" text="WAITING IN PREPARATION QUEUE" />
+                                    </children>
+                                </VBox>
+
+                                <Label style="-fx-font-size: 13px; -fx-text-fill: #64748b;" text="⏱ Estimated Preparation Time: ~12-15 minutes" />
+
+                                <HBox alignment="CENTER" spacing="12.0">
+                                    <children>
+                                        <Button fx:id="trackTokenBtn" onAction="#handleTrackToken" styleClass="button-primary" style="-fx-font-size: 14px; -fx-padding: 12px 24px;" text="Track Token →" />
+                                        <Button onAction="#handleOrderAgain" styleClass="button-secondary" style="-fx-font-size: 14px; -fx-padding: 12px 20px;" text="Order Again" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+
+                <!-- 3. PAYMENT FAILED OVERLAY VIEW -->
+                <VBox fx:id="paymentFailureView" alignment="CENTER" managed="false" spacing="20.0" style="-fx-background-color: #f8fafc; -fx-padding: 30px;" visible="false">
+                    <children>
+                        <VBox alignment="CENTER" maxWidth="520.0" spacing="18.0" styleClass="card" style="-fx-background-color: #ffffff; -fx-padding: 36px;">
+                            <children>
+                                <Label style="-fx-font-size: 48px; -fx-text-fill: #dc2626;" text="✗" />
+                                <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #991b1b;" text="PAYMENT FAILED" />
+                                
+                                <VBox alignment="CENTER" spacing="6.0" style="-fx-background-color: #fef2f2; -fx-border-color: #fecaca; -fx-border-radius: 8px; -fx-background-radius: 8px; -fx-padding: 16px 20px;">
+                                    <children>
+                                        <Label style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #b91c1c;" text="No token has been generated." />
+                                        <Label fx:id="failureReasonLabel" style="-fx-font-size: 13px; -fx-text-fill: #7f1d1d;" text="Transaction was declined or simulated failure was triggered." textAlignment="CENTER" wrapText="true" />
+                                        <Label style="-fx-font-size: 12px; -fx-text-fill: #15803d; -fx-font-weight: bold;" text="✓ Your cart has been preserved intact." />
+                                    </children>
+                                </VBox>
+
+                                <HBox alignment="CENTER" spacing="12.0">
+                                    <children>
+                                        <Button onAction="#handleTryAgain" styleClass="button-primary" style="-fx-background-color: #2563eb; -fx-font-size: 14px; -fx-padding: 12px 24px;" text="Try Again" />
+                                        <Button onAction="#handleCancelPayment" styleClass="button-secondary" style="-fx-font-size: 14px; -fx-padding: 12px 20px;" text="Return to Cart" />
+                                    </children>
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+            </children>
+        </StackPane>
+    </center>
+</BorderPane>
